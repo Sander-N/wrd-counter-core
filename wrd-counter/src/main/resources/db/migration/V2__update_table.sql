@@ -1,0 +1,3 @@
+ALTER TABLE word_data
+ADD COLUMN words JSON NOT NULL AFTER word,
+DROP COLUMN word;
