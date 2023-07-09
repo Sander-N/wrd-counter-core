@@ -1,5 +1,7 @@
 package com.sander.wrdcounter.config;
 
+import com.rabbitmq.client.AMQP;
+import jakarta.annotation.PostConstruct;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -7,13 +9,27 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 @Configuration
 public class MQConfig {
-
     public static final String QUEUE = "wrd-counter-queue";
     public static final String EXCHANGE = "wrd-counter-exchange";
     public static final String ROUTING_KEY = "wrd-counter-routing-key";
+
+    @Component
+    public class QueueConfig {
+        private AmqpAdmin amqpAdmin;
+
+        public QueueConfig(AmqpAdmin amqpAdmin) {
+            this.amqpAdmin = amqpAdmin;
+        }
+
+        @PostConstruct
+        public void initQueue() {
+            amqpAdmin.declareQueue(new Queue(QUEUE, true));
+        }
+    }
 
     @Bean
     public Queue queue() {
@@ -34,6 +50,8 @@ public class MQConfig {
 
     @Bean
     public AmqpTemplate template(ConnectionFactory connectionFactory) {
+        ConnectionFactory factory = connectionFactory;
+
         final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(converter());
         return rabbitTemplate;
