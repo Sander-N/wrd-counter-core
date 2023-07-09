@@ -2,6 +2,8 @@ FROM openjdk:20-jdk-slim as build
 
 COPY . .
 
+RUN chmod +x gradlew
+
 RUN ./gradlew build
 
 FROM openjdk:20-jdk-slim
