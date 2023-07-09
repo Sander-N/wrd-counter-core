@@ -20,10 +20,8 @@ public class Controller {
     @CrossOrigin()
     @GetMapping(value = "/getWords/{id}")
     public ResponseEntity<String> getWords(@PathVariable("id") String id) {
-        System.out.println("Got get request!");
         Optional<WordData> wordData = wordRepository.findById(id);
         if (wordData.isPresent()) {
-            System.out.println("Got words: " + wordData.get().getWords());
             return new ResponseEntity<>(wordData.get().getWords(), HttpStatus.OK);
         } else {
             throw new RuntimeException();
