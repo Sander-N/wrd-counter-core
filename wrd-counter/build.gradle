@@ -9,7 +9,15 @@ application {
 	applicationDefaultJvmArgs = ['-Dhibernate.dialect.storage_engine=innodb']
 }
 
+tasks.withType(Jar) { duplicatesStrategy = DuplicatesStrategy.EXCLUDE}
 
+tasks.withType(Zip){
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.withType(Tar) {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 
 group = 'com.sander'
 version = '0.0.1-SNAPSHOT'
@@ -26,7 +34,6 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.flywaydb:flyway-mysql'
 	implementation 'org.flywaydb:flyway-core'
@@ -36,13 +43,11 @@ dependencies {
 	implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
 	// https://mvnrepository.com/artifact/edu.stanford.nlp/stanford-corenlp
 	implementation group: 'edu.stanford.nlp', name: 'stanford-corenlp', version: '4.5.4'
+	// https://mvnrepository.com/artifact/commons-logging/commons-logging
+	implementation group: 'commons-logging', name: 'commons-logging', version: '1.2'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.amqp:spring-rabbit-test'
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
 }
